@@ -1,3 +1,6 @@
+kubectl delete -f db/k8
+kubectl delete -f GiftcardSite/k8
+kubectl delete -f proxy/k8
 minikube stop
 minikube start --driver=docker
 eval $(minikube docker-env)
