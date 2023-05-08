@@ -15,7 +15,7 @@
 
 # Created this var just in case script ever decides to get fancier.
 # For now, this pretty much only defines where the assignment repo will be cloned.
-installDir="$HOME/Desktop"
+installDir="$HOME/assingments"
 
 cd $installDir
 
@@ -72,13 +72,7 @@ else
 	minikube start
 	eval $(minikube docker-env)
 
-
-	# CLONE REPOSITORY
-	echo '##################################################'
-	echo "[*] Cloning assignment repository to {$installDir}..."
-	echo '##################################################'
-	sleep 3
-	git clone https://github.com/kcg295/AppSecAssignment3.1.git; cd AppSecAssignment3.1
+	cd test2
 
 	# SET UP CLUSTERS
 	echo '##################################################'
