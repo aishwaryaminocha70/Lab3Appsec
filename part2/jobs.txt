@@ -1,0 +1,47 @@
+Title: Part2 - Migration and Seeding jobs
+Name: Aishwarya Minocha
+
+Since the setup.sql handles the migration and seeding I commented out the code in the db/Dockerfile to start that:
+lines 6-9 of db/Dockerfile
+    #COPY ./setup.sql /docker-entrypoint-initdb.d/setup.sql
+
+    #ENTRYPOINT ["/entrypoint.sh"]
+    #CMD ["mysqld", "--secure-file-priv=/data"]
+
+Next I created a migration-job.yaml and put the commands that we used in hw2 in to handle the migration:
+
+    command: ["/bin/sh", "-c"]
+    args: ["python3 ../manage.py makemigrations && python3 ../manage.py migrate"]
+
+Before starting the migration job, I decided to use django fixtures for the seeding.  Since this uses the JSON format
+Export of the seed data in JSON: python3 manage.py dumpdata > seed.json
+
+Then I created the seed-job.yaml file with the command to load the JSON data in it:
+
+    command: ["/bin/sh", "-c"]
+    args: ["python3 manage.py loaddata seed.json"]
+
+Afterwards I re-built the docker image and started the containers using the script I made by parting out the original script provided and adding my own twist.
+
+I confirmed both jobs completed successfully in the terminal window and by navigating the site successfully
+
+mysql> show tables;
++----------------------------+
+| Tables_in_GiftcardSiteDB   |
++----------------------------+
+| LegacySite_card            |
+| LegacySite_product         |
+| LegacySite_test_migration  |
+| LegacySite_user            |
+| auth_group                 |
+| auth_group_permissions     |
+| auth_permission            |
+| auth_user                  |
+| auth_user_groups           |
+| auth_user_user_permissions |
+| django_admin_log           |
+| django_content_type        |
+| django_migrations          |
+| django_session             |
++----------------------------+
+14 rows in set (0.00 sec)

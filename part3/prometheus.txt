@@ -1,0 +1,60 @@
+Title: Part3 - Prometheus monitoring
+Name: Aishwarya Minocha
+
+First I commented out the lines in views.py to remove the dangerous monitoring since basically it displayed the password in plain text in the metrics
+
+        # KG: Uh... I'm not sure this makes sense.
+        # Collect data to ensure good password use.
+        #if pword not in graphs.keys():
+        #    graphs[pword] = Counter(f'counter_{pword}', 'The total number of '\
+        #      + f'times {pword} was used')
+        #graphs[pword].inc()
+
+Next I adding counters for Prometheus throughout views.py to increment on 404 errors for prometheus (lines: 103, 109, 155, 161, 174, 260)
+    graphs['prom_counter'].inc()
+
+Following that I added prometheus following this guide: https://devopscube.com/setup-prometheus-monitoring-on-kubernetes/
+Note: I attempted to use Helm to complete the task, however, it didn't work so I decided to do some additional research
+
+Next I rebuilt thes image and then ran the migration job
+
+Before seeding I used the site to generate 404 errors
+
+I then seeded the site with the seed-job.yaml, registered a user, bought a gift card, and produced the following metrics on http://192.168.49.2:32513/metrics:
+
+# HELP python_request_r_posts_total The total number of register posts.
+# TYPE python_request_r_posts_total counter
+python_request_r_posts_total 1.0
+# HELP python_request_r_posts_created The total number of register posts.
+# TYPE python_request_r_posts_created gauge
+python_request_r_posts_created 1.6836807678063493e+09
+# HELP python_request_l_posts_total The total number of login posts.
+# TYPE python_request_l_posts_total counter
+python_request_l_posts_total 0.0
+# HELP python_request_l_posts_created The total number of login posts.
+# TYPE python_request_l_posts_created gauge
+python_request_l_posts_created 1.683680767806375e+09
+# HELP python_request_b_posts_total The total number of card buy posts.
+# TYPE python_request_b_posts_total counter
+python_request_b_posts_total 1.0
+# HELP python_request_b_posts_created The total number of card buy posts.
+# TYPE python_request_b_posts_created gauge
+python_request_b_posts_created 1.683680767806385e+09
+# HELP python_request_g_posts_total The total number of card gift posts.
+# TYPE python_request_g_posts_total counter
+python_request_g_posts_total 0.0
+# HELP python_request_g_posts_created The total number of card gift posts.
+# TYPE python_request_g_posts_created gauge
+python_request_g_posts_created 1.6836807678063936e+09
+# HELP python_request_u_posts_total The total number of card use posts.
+# TYPE python_request_u_posts_total counter
+python_request_u_posts_total 0.0
+# HELP python_request_u_posts_created The total number of card use posts.
+# TYPE python_request_u_posts_created gauge
+python_request_u_posts_created 1.6836807678064015e+09
+# HELP database_error_return_404_total The total number of HTTP 404 error messages
+# TYPE database_error_return_404_total counter
+database_error_return_404_total 6.0
+# HELP database_error_return_404_created The total number of HTTP 404 error messages
+# TYPE database_error_return_404_created gauge
+database_error_return_404_created 1.6836807678064086e+09
