@@ -171,6 +171,7 @@ def gift_card_view(request, prod_num=0):
             prod_num = 1
         user = request.POST.get('username', None)
         if user is None:
+            graphs['prom_counter'].inc()
             return HttpResponse("ERROR 404")
         try:
             user_account = User.objects.get(username=user)
@@ -256,6 +257,7 @@ def use_card_view(request):
             user_cards = None
         context['card_list'] = user_cards
         return render(request, "use-card.html", context)
+    graphs['prom_counter'].inc()
     return HttpResponse("Error 404: Internal Server Error")
 
 def metrics_view(request):
