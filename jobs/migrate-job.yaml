@@ -9,7 +9,7 @@ spec:
       - name: migrate
         image: nyuappsec/assign3:v0
         command: ["/bin/sh", "-c"]
-        args: ["python3 ../manage.py makemigrations && python3 ../manage.py migrate"]
+        args: ["python3 manage.py makemigrations && python3 manage.py migrate"]
         env:
           - name: MYSQL_ROOT_PASSWORD
             valueFrom:
@@ -29,8 +29,8 @@ spec:
           - name: SECRET_KEY
             valueFrom: 
               secretKeyRef: 
-                  name: django-secret-key
-                  key: secretKey
+                  name: django-secret-key 
+                  key: secretKey 
 
           - name: ADMIN_UNAME
             valueFrom:
@@ -42,6 +42,6 @@ spec:
             valueFrom:
               secretKeyRef:
                   name: admin-login-secrets
-                  key: password
+                  key: password 
       restartPolicy: Never
   backoffLimit: 4

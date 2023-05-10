@@ -2,6 +2,8 @@ kubectl delete -f db/k8
 kubectl delete -f GiftcardSite/k8
 kubectl delete -f proxy/k8
 minikube stop
+docker system prune --force
+minikube delete
 minikube start --driver=docker
 eval $(minikube docker-env)
 docker build -t nyuappsec/assign3:v0 .

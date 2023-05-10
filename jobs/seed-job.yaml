@@ -1,20 +1,20 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: seed-db 
+  name: seed-job
 spec:
   template:
     spec:
       containers:
-      - name: seed-db
+      - name: seed-job
         image: nyuappsec/assign3:v0
         command: ["/bin/sh", "-c"]
-        args: ["python3 ../manage.py loaddata ../seed-db.json"]
+        args: ["python3 manage.py loaddata seed.json"]
         env:
           - name: MYSQL_ROOT_PASSWORD
             valueFrom:
               secretKeyRef:
-                  name: mysql-pwd
+                  name: sql-user-pass
                   key: password
 
           - name: MYSQL_DB
@@ -26,7 +26,7 @@ spec:
           - name: ALLOWED_HOSTS
             value: "*,"
 
-          - name: DJANGO_SECRET_KEY
+          - name: SECRET_KEY
             valueFrom: 
               secretKeyRef: 
                   name: django-secret-key 
